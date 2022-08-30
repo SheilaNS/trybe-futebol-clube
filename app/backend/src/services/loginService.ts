@@ -24,13 +24,15 @@ class LoginService {
     console.log(user);
     if (!user) {
       const err = new Error();
-      err.name = 'NotFoundError';
+      err.name = 'UnauthorizedError';
+      err.message = 'Incorrect email or password';
       throw err;
     }
     const validPass = await compare(password, user.password);
     if (!validPass) {
       const err = new Error();
-      err.name = 'ValidationError';
+      err.name = 'UnauthorizedError';
+      err.message = 'Incorrect email or password';
       throw err;
     }
     const token = this._token.create(user);
