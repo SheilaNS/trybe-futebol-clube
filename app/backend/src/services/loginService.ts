@@ -1,3 +1,4 @@
+import { compare } from 'bcryptjs';
 import TokenService from './tokenService';
 import UserService from './userService';
 
@@ -10,11 +11,20 @@ class LoginService {
   }
 
   public login = async (email: string, password: string) => {
-    const user = await this._userService.findByEmail(email, password);
+    const user = await this._userService.findByEmail(email);
+    console.log(user);
     if (!user) {
-      throw new Error();
+      const err = new Error();
+      err.name = 'NotFoundError';
+      throw err;
     }
-    const token = this._token.create({ username: user.name, email: user.email });
+    const validPass = await compare(password, user.password);
+    if (!validPass) {
+      const err = new Error();
+      err.name = 'ValidationError';
+      throw err;
+    }
+    const token = this._token.create(user);
     return token;
   };
 }

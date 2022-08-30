@@ -11,7 +11,7 @@ class LoginController {
   public login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
     const token = await this._loginService.login(email, password);
-    return res.status(200).json({ token });
+    res.status(200).json({ token });
   };
 }
 

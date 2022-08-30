@@ -1,9 +1,9 @@
 import UserModel from '../database/models/user';
 
 class UserService {
-  public findByEmail = async (email: string, password: string) => {
+  public findByEmail = async (email: string) => {
     const user = await UserModel.findOne({
-      where: { email, password },
+      where: { email },
       raw: true,
     });
     return user;
