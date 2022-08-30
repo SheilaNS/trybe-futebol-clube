@@ -10,6 +10,15 @@ class LoginService {
     this._token = new TokenService();
   }
 
+  public emailValidate = async (email: string) => {
+    if (!email) {
+      const err = new Error();
+      err.name = 'ValidationError';
+      err.message = 'All fields must be filled';
+      throw err;
+    }
+  };
+
   public login = async (email: string, password: string) => {
     const user = await this._userService.findByEmail(email);
     console.log(user);
