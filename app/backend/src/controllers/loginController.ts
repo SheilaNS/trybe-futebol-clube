@@ -10,7 +10,7 @@ class LoginController {
 
   public login = async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    await this._loginService.emailValidate(email);
+    await this._loginService.loginValidate(email, password);
     const token = await this._loginService.login(email, password);
     res.status(200).json({ token });
   };

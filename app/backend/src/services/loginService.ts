@@ -10,8 +10,8 @@ class LoginService {
     this._token = new TokenService();
   }
 
-  public emailValidate = async (email: string) => {
-    if (!email) {
+  public loginValidate = async (email: string, password: string) => {
+    if (!email || !password) {
       const err = new Error();
       err.name = 'ValidationError';
       err.message = 'All fields must be filled';
