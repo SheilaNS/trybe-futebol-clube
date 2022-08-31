@@ -4,7 +4,7 @@ import { sign, verify } from 'jsonwebtoken';
 const secret = process.env.JWT_SECRET || 'jwt_secret';
 
 class TokenService {
-  public create = (data: {
+  public create = async (data: {
     name: string;
     role: string;
     email: string;
@@ -15,7 +15,7 @@ class TokenService {
     return token;
   };
 
-  public verify = (token: string) => {
+  public verify = async (token: string) => {
     const result = verify(token, secret);
     return result;
   };

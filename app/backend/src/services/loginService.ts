@@ -5,6 +5,7 @@ import UserService from './userService';
 class LoginService {
   private _userService: UserService;
   private _token: TokenService;
+
   constructor() {
     this._userService = new UserService();
     this._token = new TokenService();
@@ -21,7 +22,6 @@ class LoginService {
 
   public login = async (email: string, password: string) => {
     const user = await this._userService.findByEmail(email);
-    console.log(user);
     if (!user) {
       const err = new Error();
       err.name = 'UnauthorizedError';
@@ -37,6 +37,11 @@ class LoginService {
     }
     const token = this._token.create(user);
     return token;
+  };
+
+  public validate = async (token: string) => {
+    const tokenOk = await this._token.verify(token);
+    return tokenOk as { email: string, role: string };
   };
 }
 
