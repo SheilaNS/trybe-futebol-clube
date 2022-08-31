@@ -5,12 +5,12 @@ const secret = process.env.JWT_SECRET || 'jwt_secret';
 
 class TokenService {
   public create = async (data: {
-    name: string;
+    username: string;
     role: string;
     email: string;
   }) => {
-    const { name, email, role } = data;
-    const payload = { name, email, role };
+    const { username, email, role } = data;
+    const payload = { username, email, role };
     const token = sign(payload, secret);
     return token;
   };

@@ -3,7 +3,7 @@ import db from '.';
 
 class UserModel extends Model {
   public id!: number;
-  public name!: string;
+  public username!: string;
   public role!: string;
   public email!: string;
   public password!: string;
