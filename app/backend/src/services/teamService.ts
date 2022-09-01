@@ -11,7 +11,7 @@ class TeamService {
     if (!team) {
       const err = new Error();
       err.name = 'NotFoundError';
-      err.message = 'Team not found';
+      err.message = 'There is no team with such id!';
       throw err;
     }
     return team;

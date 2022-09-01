@@ -1,7 +1,16 @@
 import TeamModel from '../database/models/team';
 import MatchModel from '../database/models/match';
+import TeamService from './teamService';
+import errorCreate from '../middlewares/errorCreate';
 
+const UNAUT = 'UnauthorizedError';
 class MatchService {
+  private _teamService: TeamService;
+
+  constructor() {
+    this._teamService = new TeamService();
+  }
+
   public listAll = async () => {
     const matches = await MatchModel.findAll({
       include: [
@@ -47,11 +56,10 @@ class MatchService {
     inProgress: boolean;
   }) => {
     if (matchData.homeTeam === matchData.awayTeam) {
-      const err = new Error();
-      err.name = 'UnauthorizedError';
-      err.message = 'It is not possible to create a match with two equal teams';
-      throw err;
+      throw errorCreate(UNAUT, 'It is not possible to create a match with two equal teams');
     }
+    await this._teamService.getById(String(matchData.homeTeam));
+    await this._teamService.getById(String(matchData.awayTeam));
     const add = await MatchModel.create(matchData);
     return add;
   };
