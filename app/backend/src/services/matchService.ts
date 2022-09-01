@@ -46,6 +46,12 @@ class MatchService {
     awayTeamGoals: number;
     inProgress: boolean;
   }) => {
+    if (matchData.homeTeam === matchData.awayTeam) {
+      const err = new Error();
+      err.name = 'UnauthorizedError';
+      err.message = 'It is not possible to create a match with two equal teams';
+      throw err;
+    }
     const add = await MatchModel.create(matchData);
     return add;
   };
