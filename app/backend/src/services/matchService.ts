@@ -38,6 +38,17 @@ class MatchService {
     });
     return matches;
   };
+
+  public saveMatch = async (matchData: {
+    homeTeam: number;
+    awayTeam: number;
+    homeTeamGoals: number;
+    awayTeamGoals: number;
+    inProgress: boolean;
+  }) => {
+    const add = await MatchModel.create(matchData);
+    return add;
+  };
 }
 
 export default MatchService;
