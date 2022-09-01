@@ -132,4 +132,30 @@ describe("Rota /teams", () => {
       expect(chaiHttpResponse.body).to.be.deep.eq(teamList[0]);
     });
   });
+
+  describe("GET /teams/:id feito sem sucesso", () => {
+    beforeEach(async () => {
+      sinon.stub(TeamModel, "findByPk").resolves(teamList[99] as TeamModel);
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("retorna status 404", async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .get("/teams/99");
+
+      expect(chaiHttpResponse.status).to.be.eq(200);
+    });
+
+    it("retorna uma mensagem de erro", async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .get("/teams/99");
+
+      expect(chaiHttpResponse.body).to.have.property('message');
+    });
+  });
 });

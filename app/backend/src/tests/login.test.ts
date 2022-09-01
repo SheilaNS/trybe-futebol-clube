@@ -70,4 +70,27 @@ describe("Rota /login", () => {
       expect(chaiHttpResponse.body).to.have.property("token");
     });
   });
+  
+  describe("POST /login feito sem sucesso", () => {
+    beforeEach(async () => {
+      sinon.stub(UserModel, "findOne").resolves();
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("retorna status 401", async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post("/login")
+        .send(loginInvalidData[0]);
+
+      expect(chaiHttpResponse.status).to.be.eq(401);
+    });
+
+    it("retorna uma mensagem", () => {
+      expect(chaiHttpResponse.body).to.have.property("message");
+    });
+  });
 });
