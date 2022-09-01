@@ -1365,6 +1365,22 @@ const inProgressTrue = [
   }
 ]
 
+const sendMacth = {
+  "homeTeam": 16,
+  "awayTeam": 8,
+  "homeTeamGoals": 2,
+  "awayTeamGoals": 2
+}
+
+const returnMatch = {
+  "id": 1,
+  "homeTeam": 16,
+  "homeTeamGoals": 2,
+  "awayTeam": 8,
+  "awayTeamGoals": 2,
+  "inProgress": true,
+}
+
 describe("Rota /matches", () => {
   let chaiHttpResponse: Response;
   describe("GET /matches feito com sucesso", () => {
@@ -1442,6 +1458,62 @@ describe("Rota /matches", () => {
       .get("/matches?inProgress=false");
 
       expect(chaiHttpResponse.body).to.be.deep.eq(inProgressFalse);
+    });
+  });
+
+  describe("POST /matches feito com sucesso", () => {
+    beforeEach(async () => {
+      sinon.stub(MatchModel, "create").resolves(returnMatch as MatchModel);
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("retorna status 201", async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post("/matches")
+        .send(sendMacth);
+
+      expect(chaiHttpResponse.status).to.be.eq(201);
+    });
+
+    it("retorna um objeto da match", async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .post("/matches")
+      .send(sendMacth);
+
+      expect(chaiHttpResponse.body).to.have.property('id');
+    });
+  });
+
+  describe("PATCH /matches feito com sucesso", () => {
+    beforeEach(async () => {
+      sinon.stub(MatchModel, "update").resolves();
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("retorna status 200", async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .patch("/matches/41/finish")
+        .send(sendMacth);
+
+      expect(chaiHttpResponse.status).to.be.eq(200);
+    });
+
+    it("retorna um objeto da match", async () => {
+      chaiHttpResponse = await chai
+      .request(app)
+      .patch("/matches/41/finish")
+      .send(sendMacth);
+
+      expect(chaiHttpResponse.body).to.be.deep.eq({ message:  'Finished' });
     });
   });
 });

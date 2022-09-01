@@ -135,7 +135,7 @@ describe("Rota /teams", () => {
 
   describe("GET /teams/:id feito sem sucesso", () => {
     beforeEach(async () => {
-      sinon.stub(TeamModel, "findByPk").resolves(teamList[99] as TeamModel);
+      sinon.stub(TeamModel, "findByPk").resolves();
     });
 
     afterEach(() => {
@@ -147,7 +147,7 @@ describe("Rota /teams", () => {
         .request(app)
         .get("/teams/99");
 
-      expect(chaiHttpResponse.status).to.be.eq(200);
+      expect(chaiHttpResponse.status).to.be.eq(404);
     });
 
     it("retorna uma mensagem de erro", async () => {

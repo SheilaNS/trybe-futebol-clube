@@ -71,7 +71,7 @@ describe("Rota /login", () => {
     });
   });
   
-  describe("POST /login feito sem sucesso", () => {
+  describe("POST /login feito com a senha incorreta", () => {
     beforeEach(async () => {
       sinon.stub(UserModel, "findOne").resolves();
     });
@@ -87,6 +87,52 @@ describe("Rota /login", () => {
         .send(loginInvalidData[0]);
 
       expect(chaiHttpResponse.status).to.be.eq(401);
+    });
+
+    it("retorna uma mensagem", () => {
+      expect(chaiHttpResponse.body).to.have.property("message");
+    });
+  });
+
+  describe("POST /login feito sem e-mail", () => {
+    beforeEach(async () => {
+      sinon.stub(UserModel, "findOne").resolves();
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("retorna status 400", async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post("/login")
+        .send(loginInvalidData[1]);
+
+      expect(chaiHttpResponse.status).to.be.eq(400);
+    });
+
+    it("retorna uma mensagem", () => {
+      expect(chaiHttpResponse.body).to.have.property("message");
+    });
+  });
+
+  describe("POST /login feito sem senha", () => {
+    beforeEach(async () => {
+      sinon.stub(UserModel, "findOne").resolves();
+    });
+
+    afterEach(() => {
+      sinon.restore();
+    });
+
+    it("retorna status 400", async () => {
+      chaiHttpResponse = await chai
+        .request(app)
+        .post("/login")
+        .send(loginInvalidData[2]);
+
+      expect(chaiHttpResponse.status).to.be.eq(400);
     });
 
     it("retorna uma mensagem", () => {
