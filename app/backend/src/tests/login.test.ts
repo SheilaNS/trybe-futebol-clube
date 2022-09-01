@@ -49,11 +49,11 @@ const loginInvalidData = [
 describe("Rota /login", () => {
   let chaiHttpResponse: Response;
   describe("POST /login feito com sucesso", () => {
-    before(async () => {
+    beforeEach(async () => {
       sinon.stub(UserModel, "findOne").resolves(userInfo as UserModel);
     });
 
-    after(() => {
+    afterEach(() => {
       sinon.restore();
     });
 
