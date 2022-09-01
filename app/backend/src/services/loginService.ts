@@ -39,7 +39,13 @@ class LoginService {
     return token;
   };
 
-  public validate = async (token: string) => {
+  public validate = async (token: string | undefined) => {
+    if (!token) {
+      const err = new Error();
+      err.name = 'UnauthorizedError';
+      err.message = 'Invalid token';
+      throw err;
+    }
     const tokenOk = await this._token.verify(token);
     return tokenOk as { email: string, role: string };
   };

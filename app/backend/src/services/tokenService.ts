@@ -15,7 +15,13 @@ class TokenService {
     return token;
   };
 
-  public verify = async (token: string) => {
+  public verify = async (token: string | undefined) => {
+    if (!token) {
+      const err = new Error();
+      err.name = 'UnauthorizedError';
+      err.message = 'Invalid token';
+      throw err;
+    }
     const result = verify(token, secret);
     return result;
   };

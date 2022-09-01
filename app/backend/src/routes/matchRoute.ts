@@ -5,6 +5,7 @@ const matchRouter = Router();
 
 const matchController = new MatchController();
 
+matchRouter.patch('/:id/finish', matchController.finishMatch);
 matchRouter.post('/', matchController.addMatch);
 matchRouter.get('/', matchController.findAll);
 

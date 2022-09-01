@@ -11,11 +11,12 @@ class MatchController {
     this._tokenService = new TokenService();
   }
 
-  public findAll = async (req: Request, res: Response) => {
+  public findAll = async (req: Request, res: Response): Promise<void> => {
     const { inProgress } = req.query;
-    if (inProgress === undefined) {
+    if (!inProgress) {
       const matches = await this._matchService.listAll();
       res.status(200).json(matches);
+      return;
     }
     const matches = await this._matchService.filterByProgress(JSON.parse(inProgress as string));
     res.status(200).json(matches);
@@ -23,17 +24,17 @@ class MatchController {
 
   public addMatch = async (req: Request, res: Response) => {
     const token = req.headers.authorization;
-    if (!token) {
-      const err = new Error();
-      err.name = 'UnauthorizedError';
-      err.message = 'Invalid token';
-      throw err;
-    }
     await this._tokenService.verify(token);
     const matchData = req.body;
     matchData.inProgress = true;
     const newMatch = await this._matchService.saveMatch(matchData);
     res.status(201).json(newMatch);
+  };
+
+  public finishMatch = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const finish = await this._matchService.finishMatch(id);
+    res.status(200).json(finish);
   };
 }
 

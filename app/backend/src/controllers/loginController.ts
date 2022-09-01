@@ -17,12 +17,6 @@ class LoginController {
 
   public validate = async (req: Request, res: Response) => {
     const token = req.headers.authorization;
-    if (!token) {
-      const err = new Error();
-      err.name = 'UnauthorizedError';
-      err.message = 'Invalid token';
-      throw err;
-    }
     const { role } = await this._loginService.validate(token);
     res.status(200).json({ role });
   };

@@ -49,6 +49,24 @@ class MatchService {
     const add = await MatchModel.create(matchData);
     return add;
   };
+
+  public finishMatch = async (id: string) => {
+    const exists = await MatchModel.findByPk(id);
+    if (!exists) {
+      const err = new Error();
+      err.name = 'NotFoundError';
+      err.message = 'Match not found';
+      throw err;
+    }
+    const ok = await MatchModel.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+    if (ok[0] === 1) {
+      return { message: 'Finished' };
+    }
+    return { message: 'Match already finished' };
+  };
 }
 
 export default MatchService;
