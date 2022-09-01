@@ -9,7 +9,12 @@ class MatchController {
   }
 
   public findAll = async (req: Request, res: Response) => {
-    const matches = await this._matchService.listAll();
+    const { inProgress } = req.query;
+    if (inProgress === undefined) {
+      const matches = await this._matchService.listAll();
+      res.status(200).json(matches);
+    }
+    const matches = await this._matchService.filterByProgress(JSON.parse(inProgress as string));
     res.status(200).json(matches);
   };
 }

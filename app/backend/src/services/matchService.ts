@@ -19,6 +19,25 @@ class MatchService {
     });
     return matches;
   };
+
+  public filterByProgress = async (inProgress: boolean) => {
+    const matches = await MatchModel.findAll({
+      where: { inProgress },
+      include: [
+        {
+          model: TeamModel,
+          as: 'teamHome',
+          attributes: { exclude: ['id'] },
+        },
+        {
+          model: TeamModel,
+          as: 'teamAway',
+          attributes: { exclude: ['id'] },
+        },
+      ],
+    });
+    return matches;
+  };
 }
 
 export default MatchService;
