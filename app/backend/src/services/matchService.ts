@@ -67,10 +67,7 @@ class MatchService {
   public finishMatch = async (id: string) => {
     const exists = await MatchModel.findByPk(id);
     if (!exists) {
-      const err = new Error();
-      err.name = 'NotFoundError';
-      err.message = 'Match not found';
-      throw err;
+      throw errorCreate('NotFoundError', 'Match not found');
     }
     const ok = await MatchModel.update(
       { inProgress: false },
@@ -80,6 +77,24 @@ class MatchService {
       return { message: 'Finished' };
     }
     return { message: 'Match already finished' };
+  };
+
+  public updateMatch = async (id: string, matchData: {
+    homeTeamGoals: number;
+    awayTeamGoals: number;
+  }) => {
+    const exists = await MatchModel.findByPk(id);
+    if (!exists) {
+      throw errorCreate('NotFoundError', 'Match not found');
+    }
+    const ok = await MatchModel.update(
+      matchData,
+      { where: { id } },
+    );
+    if (ok[0] === 1) {
+      return matchData;
+    }
+    return { message: 'Match already updated' };
   };
 }
 
