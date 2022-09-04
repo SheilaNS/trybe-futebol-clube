@@ -15,7 +15,7 @@ type ResultTeams = {
   efficiency: number;
 };
 
-class LeaderService {
+class AwayLeaderService {
   private _teamService: TeamService;
   private _matchService: MatchService;
 
@@ -27,10 +27,6 @@ class LeaderService {
   private totalPoints = (array: MatchModel[], teamId: number) => {
     let totalPoints = 0;
     array.forEach((match) => {
-      if (match.homeTeam === teamId) {
-        if (match.homeTeamGoals > match.awayTeamGoals) totalPoints += 3;
-        if (match.homeTeamGoals === match.awayTeamGoals) totalPoints += 1;
-      }
       if (match.awayTeam === teamId) {
         if (match.homeTeamGoals < match.awayTeamGoals) totalPoints += 3;
         if (match.homeTeamGoals === match.awayTeamGoals) totalPoints += 1;
@@ -42,7 +38,7 @@ class LeaderService {
   private totalGames = (array: MatchModel[], teamId: number) => {
     let totalGames = 0;
     array.forEach((match) => {
-      if (match.homeTeam === teamId || match.awayTeam === teamId) totalGames += 1;
+      if (match.awayTeam === teamId) totalGames += 1;
     });
     return totalGames;
   };
@@ -50,7 +46,6 @@ class LeaderService {
   private totalVictories = (array: MatchModel[], teamId: number) => {
     let totalVictories = 0;
     array.forEach((e) => {
-      if (e.homeTeam === teamId && e.homeTeamGoals > e.awayTeamGoals) totalVictories += 1;
       if (e.awayTeam === teamId && e.homeTeamGoals < e.awayTeamGoals) totalVictories += 1;
     });
     return totalVictories;
@@ -59,7 +54,6 @@ class LeaderService {
   private totalLosses = (array: MatchModel[], teamId: number) => {
     let totalLosses = 0;
     array.forEach((e) => {
-      if (e.homeTeam === teamId && e.homeTeamGoals < e.awayTeamGoals) totalLosses += 1;
       if (e.awayTeam === teamId && e.homeTeamGoals > e.awayTeamGoals) totalLosses += 1;
     });
     return totalLosses;
@@ -68,7 +62,6 @@ class LeaderService {
   private totalDraws = (array: MatchModel[], teamId: number) => {
     let totalDraws = 0;
     array.forEach((e) => {
-      if (e.homeTeam === teamId && e.homeTeamGoals === e.awayTeamGoals) totalDraws += 1;
       if (e.awayTeam === teamId && e.homeTeamGoals === e.awayTeamGoals) totalDraws += 1;
     });
     return totalDraws;
@@ -78,10 +71,6 @@ class LeaderService {
     let goalsFavor = 0;
     let goalsOwn = 0;
     array.forEach((e) => {
-      if (e.homeTeam === teamId) {
-        goalsFavor += e.homeTeamGoals;
-        goalsOwn += e.awayTeamGoals;
-      }
       if (e.awayTeam === teamId) {
         goalsFavor += e.awayTeamGoals;
         goalsOwn += e.homeTeamGoals;
@@ -125,4 +114,4 @@ class LeaderService {
   };
 }
 
-export default LeaderService;
+export default AwayLeaderService;

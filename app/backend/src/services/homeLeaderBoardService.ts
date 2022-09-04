@@ -15,7 +15,7 @@ type ResultTeams = {
   efficiency: number;
 };
 
-class LeaderService {
+class HomeLeaderService {
   private _teamService: TeamService;
   private _matchService: MatchService;
 
@@ -31,10 +31,6 @@ class LeaderService {
         if (match.homeTeamGoals > match.awayTeamGoals) totalPoints += 3;
         if (match.homeTeamGoals === match.awayTeamGoals) totalPoints += 1;
       }
-      if (match.awayTeam === teamId) {
-        if (match.homeTeamGoals < match.awayTeamGoals) totalPoints += 3;
-        if (match.homeTeamGoals === match.awayTeamGoals) totalPoints += 1;
-      }
     });
     return totalPoints;
   };
@@ -42,7 +38,7 @@ class LeaderService {
   private totalGames = (array: MatchModel[], teamId: number) => {
     let totalGames = 0;
     array.forEach((match) => {
-      if (match.homeTeam === teamId || match.awayTeam === teamId) totalGames += 1;
+      if (match.homeTeam === teamId) totalGames += 1;
     });
     return totalGames;
   };
@@ -51,7 +47,6 @@ class LeaderService {
     let totalVictories = 0;
     array.forEach((e) => {
       if (e.homeTeam === teamId && e.homeTeamGoals > e.awayTeamGoals) totalVictories += 1;
-      if (e.awayTeam === teamId && e.homeTeamGoals < e.awayTeamGoals) totalVictories += 1;
     });
     return totalVictories;
   };
@@ -60,7 +55,6 @@ class LeaderService {
     let totalLosses = 0;
     array.forEach((e) => {
       if (e.homeTeam === teamId && e.homeTeamGoals < e.awayTeamGoals) totalLosses += 1;
-      if (e.awayTeam === teamId && e.homeTeamGoals > e.awayTeamGoals) totalLosses += 1;
     });
     return totalLosses;
   };
@@ -69,7 +63,6 @@ class LeaderService {
     let totalDraws = 0;
     array.forEach((e) => {
       if (e.homeTeam === teamId && e.homeTeamGoals === e.awayTeamGoals) totalDraws += 1;
-      if (e.awayTeam === teamId && e.homeTeamGoals === e.awayTeamGoals) totalDraws += 1;
     });
     return totalDraws;
   };
@@ -81,10 +74,6 @@ class LeaderService {
       if (e.homeTeam === teamId) {
         goalsFavor += e.homeTeamGoals;
         goalsOwn += e.awayTeamGoals;
-      }
-      if (e.awayTeam === teamId) {
-        goalsFavor += e.awayTeamGoals;
-        goalsOwn += e.homeTeamGoals;
       }
     });
     const goalsBalance = goalsFavor - goalsOwn;
@@ -125,4 +114,4 @@ class LeaderService {
   };
 }
 
-export default LeaderService;
+export default HomeLeaderService;
