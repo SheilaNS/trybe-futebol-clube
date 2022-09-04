@@ -1463,7 +1463,7 @@ describe("Rota /matches", () => {
 
   describe("POST /matches feito com sucesso", () => {
     beforeEach(async () => {
-      sinon.stub(MatchModel, "create").resolves(returnMatch as MatchModel);
+      sinon.stub(MatchModel, "findAll").resolves(inProgressFalse as unknown as MatchModel[]);
     });
 
     afterEach(() => {
@@ -1491,7 +1491,7 @@ describe("Rota /matches", () => {
 
   describe("PATCH /matches feito com sucesso", () => {
     beforeEach(async () => {
-      sinon.stub(MatchModel, "update").resolves();
+      sinon.stub(MatchModel, "findAll").resolves(inProgressFalse as unknown as MatchModel[]);
     });
 
     afterEach(() => {
